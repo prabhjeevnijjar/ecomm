@@ -1,0 +1,17 @@
+.cardsarea {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 69%;
+  height: 100vh;
+  position: absolute;
+  right: 0;
+  /* margin-right: 15px; */
+}
+@media only screen and (max-width: 1025px) {
+  .cardsarea {
+    width: 100%;
+  }
+}

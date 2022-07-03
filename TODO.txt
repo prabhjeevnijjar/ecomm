@@ -1,0 +1,21 @@
+[X] Setup Parcel, React, Babel, folder structure
+[] Deploy on netlify
+[X] Create Json Data file
+[X] Create filter constants file
+[X] Create Routes
+
+[X] Component Files
+    [] Individual card
+    [] Search filter
+    [] All Cards
+    [] Featured slideshow
+    [X] Breadcrumb
+    [] Mobile Filter
+    [] Web Filter
+[X] Pages
+    [X] Home
+    [] Products
+    [] 404 page not found
+
+NOTE:
+1. Each component's css file is in a seprate folder inside src/css/component_name/index.css

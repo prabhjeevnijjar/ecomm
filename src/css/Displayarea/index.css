@@ -1,0 +1,63 @@
+.mainarea {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 30vh;
+}
+.mainarea__left {
+  width: 30%;
+  height: 30vh;
+}
+.mainarea__right {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+.mainarea__right__top {
+  height: 25%;
+  width: 100%;
+}
+.mainarea__right__top_heading {
+  text-align: center;
+}
+.mainarea__right__top__heading h2 {
+  margin: 18px;
+  width: 194px;
+  letter-spacing: 1px;
+  color: red;
+  font-weight: 500;
+}
+.mainarea__right__bottom {
+  height: 75%;
+  width: 100%;
+}
+.mainarea__right__bottom img {
+  width: 100%;
+  object-fit: cover;
+  height: 100%;
+}
+.mainarea__right__top {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  width: 100%;
+}
+.mainarea__right__top__filter {
+  padding: 26px;
+  font-size: 1.3rem;
+}
+.mainarea__right__top__filter select {
+  margin-left: 10px;
+}
+@media only screen and (max-width: 1025px) {
+  .mainarea__right__top {
+    display: none;
+  }
+  .mainarea__left {
+    display: none;
+  }
+  /* make mainarea top invisible and show the botton nav bar */
+}

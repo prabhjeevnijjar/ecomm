@@ -1,0 +1,35 @@
+.individualcard {
+  max-height: 368px;
+  min-width: 220px;
+  max-width: 220px;
+  border: 2px solid lightgray;
+  margin: 8px;
+  z-index: -1;
+}
+.individualcard__padding {
+  padding: 8px;
+}
+.individualcard__img {
+  display: flex;
+  justify-content: center;
+  object-fit: fill;
+  width: 100%;
+}
+.individualcard__img img {
+  max-height: 150px;
+  width: 100%;
+}
+.individualcard__name p {
+  padding: 5px;
+}
+.individualcard__price p {
+  padding: 5px;
+}
+.individualcard__actions {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  border-top: 2px solid lightgray;
+  height: 50px;
+  bottom: 0;
+}
