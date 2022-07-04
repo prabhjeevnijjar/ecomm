@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import "../css/Filtersdropdownarea/index.css";
 import {
   dogFoodVegNonVegType,
@@ -7,7 +8,10 @@ import {
   dogBreeds,
 } from "../constants/filters";
 
-const Filtersdropdownarea = () => {
+const Filtersdropdownarea = ({filteredBrandsArr,
+  setFilteredBrandsArr,
+  filteredBlsArr,
+  setFilteredBlsArr}) => {
   const [checkedBrandsState, setCheckedBrandsState] = useState(
     new Array(dogFoodBrands.length).fill(false)
   );
@@ -24,8 +28,10 @@ const Filtersdropdownarea = () => {
     new Array(dogFoodVegNonVegType.length).fill(false)
   );
 
-  //selected filter values are stored in this array
-  const [filteredBrandsArr, setFilteredBrandsArr] = useState([]);
+
+ 
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // BRANDS //
   const handleBrandsOnChange = (position) => {
@@ -72,39 +78,41 @@ const Filtersdropdownarea = () => {
         filteredBrandsValues.push(dogFoodBrands[i]);
       }
     }
-    // filteredBrandsValues.map(data=>console.log(data))
     if (filteredBrandsValues.length > 0) {
       setFilteredBrandsArr(filteredBrandsValues);
-      // filteredBrandsValues.map(data=>console.log(data))
     }
-  
+    // BLS //
+    let filteredBlsValues = [];
+    for (let i = 0; i < checkedBlsState.length; i++) {
+      if (checkedBlsState[i] === true) {
+        filteredBlsValues.push(dogBreedLifeStage[i]);
+      }
+    }
+    if (filteredBlsValues.length > 0) {
+      setFilteredBlsArr(filteredBlsValues);
+    }
+
+    let qString = filteredBrandsValues.join(",");
+    let qString2 = filteredBlsValues.join(",");
+    
+    setSearchParams({ brands: qString, bls: qString2 });
   };
-  // const filteredBrandValues = checkedBrandsState.filter(
-  //   // (checkedBrandsState,i) => checkedBrandsState[i] === true
-  //   function (value, i) {
-  //     if (value === true) return dogFoodBrands[i];
-  //   }
-  // );
 
-  // filteredBrandsArr.map((data) => console.log(data));
-  // console.log("true values", JSON.stringify(filteredBrandsArr));
+  useEffect(() => {
+   for(let entry of searchParams.entries()){
+    console.log("USE EFFECT",entry);
+    console.log("Section",entry[0])
+    let val = entry[1].split(',')
+    console.log("Values",val);
+   }
+  }, []);
 
-  // for (let i = 0; i < checkedBrandsState.length; i++) {
-  //   // let filteredBrandsArr = [];
-  //   if (checkedBrandsState[i] === true) {
-  //     // filteredBrandsArr.push = dogFoodBrands[i];
-  //     // filteredBrandsArr.push(dogFoodBrands[i]);
-  //     setFilteredBrandsArr((oldArray) => [...oldArray, dogFoodBrands[i]]);
-  //     // setTheArray(oldArray => [...oldArray, newElement]);
-  //     // console.log("true pos", brandsArr[i]);
-  //   }
-  // }
-  // console.log("breed filters", filteredBrandsArr);
   return (
     <section className="filtersarea">
       <section className="filtersarea_brands">
         <section className="filtersarea_brands heading ">
           <h4>Brands</h4>
+          <button onClick={handleApplyFiltersOnClick}>Test</button>
           <ul className="filtersarea_list">
             {dogFoodBrands.map((name, index) => {
               return (
@@ -199,8 +207,6 @@ const Filtersdropdownarea = () => {
               );
             })}
           </ul>
-          
-        
         </section>
         <section className="filtersarea_foodtype_filters"></section>
       </section>

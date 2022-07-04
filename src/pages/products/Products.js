@@ -7,6 +7,8 @@ import TopNav from "../../components/TopNav";
 
 const Products = () => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1025);
+  const [filteredBrandsArr, setFilteredBrandsArr] = useState([]);
+  const [filteredBlsArr, setFilteredBlsArr] = useState([]);
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1025);
@@ -23,7 +25,7 @@ const Products = () => {
       <Bottomfiltersnav />
       {isDesktop ? (
         <section>
-          <Productscardarea /> <Filtersdropdownarea />
+          <Productscardarea filteredBrandsArr={filteredBrandsArr} /> <Filtersdropdownarea filteredBrandsArr={filteredBrandsArr} setFilteredBrandsArr={setFilteredBrandsArr} filteredBlsArr={filteredBlsArr} setFilteredBlsArr={setFilteredBlsArr} />
         </section>
       ) : (
         <Productscardarea />

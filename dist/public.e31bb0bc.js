@@ -35749,6 +35749,8 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _reactRouterDom = require("react-router-dom");
+
 require("../css/Filtersdropdownarea/index.css");
 
 var _filters = require("../constants/filters");
@@ -35756,6 +35758,8 @@ var _filters = require("../constants/filters");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -35769,7 +35773,12 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var Filtersdropdownarea = function Filtersdropdownarea() {
+var Filtersdropdownarea = function Filtersdropdownarea(_ref) {
+  var filteredBrandsArr = _ref.filteredBrandsArr,
+      setFilteredBrandsArr = _ref.setFilteredBrandsArr,
+      filteredBlsArr = _ref.filteredBlsArr,
+      setFilteredBlsArr = _ref.setFilteredBlsArr;
+
   var _useState = (0, _react.useState)(new Array(_filters.dogFoodBrands.length).fill(false)),
       _useState2 = _slicedToArray(_useState, 2),
       checkedBrandsState = _useState2[0],
@@ -35788,13 +35797,12 @@ var Filtersdropdownarea = function Filtersdropdownarea() {
   var _useState7 = (0, _react.useState)(new Array(_filters.dogFoodVegNonVegType.length).fill(false)),
       _useState8 = _slicedToArray(_useState7, 2),
       checkedTofState = _useState8[0],
-      setCheckedTofState = _useState8[1]; //selected filter values are stored in this array
+      setCheckedTofState = _useState8[1];
 
-
-  var _useState9 = (0, _react.useState)([]),
-      _useState10 = _slicedToArray(_useState9, 2),
-      filteredBrandsArr = _useState10[0],
-      setFilteredBrandsArr = _useState10[1]; // BRANDS //
+  var _useSearchParams = (0, _reactRouterDom.useSearchParams)(),
+      _useSearchParams2 = _slicedToArray(_useSearchParams, 2),
+      searchParams = _useSearchParams2[0],
+      setSearchParams = _useSearchParams2[1]; // BRANDS //
 
 
   var handleBrandsOnChange = function handleBrandsOnChange(position) {
@@ -35839,40 +35847,60 @@ var Filtersdropdownarea = function Filtersdropdownarea() {
       if (checkedBrandsState[i] === true) {
         filteredBrandsValues.push(_filters.dogFoodBrands[i]);
       }
-    } // filteredBrandsValues.map(data=>console.log(data))
-
+    }
 
     if (filteredBrandsValues.length > 0) {
-      setFilteredBrandsArr(filteredBrandsValues); // filteredBrandsValues.map(data=>console.log(data))
+      setFilteredBrandsArr(filteredBrandsValues);
+    } // BLS //
+
+
+    var filteredBlsValues = [];
+
+    for (var _i2 = 0; _i2 < checkedBlsState.length; _i2++) {
+      if (checkedBlsState[_i2] === true) {
+        filteredBlsValues.push(_filters.dogBreedLifeStage[_i2]);
+      }
     }
-  }; // const filteredBrandValues = checkedBrandsState.filter(
-  //   // (checkedBrandsState,i) => checkedBrandsState[i] === true
-  //   function (value, i) {
-  //     if (value === true) return dogFoodBrands[i];
-  //   }
-  // );
-  // filteredBrandsArr.map((data) => console.log(data));
-  // console.log("true values", JSON.stringify(filteredBrandsArr));
-  // for (let i = 0; i < checkedBrandsState.length; i++) {
-  //   // let filteredBrandsArr = [];
-  //   if (checkedBrandsState[i] === true) {
-  //     // filteredBrandsArr.push = dogFoodBrands[i];
-  //     // filteredBrandsArr.push(dogFoodBrands[i]);
-  //     setFilteredBrandsArr((oldArray) => [...oldArray, dogFoodBrands[i]]);
-  //     // setTheArray(oldArray => [...oldArray, newElement]);
-  //     // console.log("true pos", brandsArr[i]);
-  //   }
-  // }
-  // console.log("breed filters", filteredBrandsArr);
 
+    if (filteredBlsValues.length > 0) {
+      setFilteredBlsArr(filteredBlsValues);
+    }
 
+    var qString = filteredBrandsValues.join(",");
+    var qString2 = filteredBlsValues.join(",");
+    setSearchParams({
+      brands: qString,
+      bls: qString2
+    });
+  };
+
+  (0, _react.useEffect)(function () {
+    var _iterator = _createForOfIteratorHelper(searchParams.entries()),
+        _step;
+
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var entry = _step.value;
+        console.log("USE EFFECT", entry);
+        console.log("Section", entry[0]);
+        var val = entry[1].split(',');
+        console.log("Values", val);
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+  }, []);
   return _react.default.createElement("section", {
     className: "filtersarea"
   }, _react.default.createElement("section", {
     className: "filtersarea_brands"
   }, _react.default.createElement("section", {
     className: "filtersarea_brands heading "
-  }, _react.default.createElement("h4", null, "Brands"), _react.default.createElement("ul", {
+  }, _react.default.createElement("h4", null, "Brands"), _react.default.createElement("button", {
+    onClick: handleApplyFiltersOnClick
+  }, "Test"), _react.default.createElement("ul", {
     className: "filtersarea_list"
   }, _filters.dogFoodBrands.map(function (name, index) {
     return _react.default.createElement("li", {
@@ -35973,7 +36001,7 @@ var Filtersdropdownarea = function Filtersdropdownarea() {
 
 var _default = Filtersdropdownarea;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","../css/Filtersdropdownarea/index.css":"../src/css/Filtersdropdownarea/index.css","../constants/filters":"../src/constants/filters.js"}],"../src/css/Productscardarea/index.css":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/index.js","../css/Filtersdropdownarea/index.css":"../src/css/Filtersdropdownarea/index.css","../constants/filters":"../src/constants/filters.js"}],"../src/css/Productscardarea/index.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -36106,7 +36134,11 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-var Productscardarea = function Productscardarea() {
+var Productscardarea = function Productscardarea(_ref) {
+  var filteredBrandsArr = _ref.filteredBrandsArr;
+  (0, _react.useEffect)(function () {
+    console.log("PRODUCT AREA", filteredBrandsArr);
+  }, [filteredBrandsArr]);
   return _react.default.createElement("section", {
     className: "cardsarea"
   }, _dogFoodData.default.map(function (item, i) {
@@ -36206,6 +36238,16 @@ var Products = function Products() {
       isDesktop = _useState2[0],
       setDesktop = _useState2[1];
 
+  var _useState3 = (0, _react.useState)([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      filteredBrandsArr = _useState4[0],
+      setFilteredBrandsArr = _useState4[1];
+
+  var _useState5 = (0, _react.useState)([]),
+      _useState6 = _slicedToArray(_useState5, 2),
+      filteredBlsArr = _useState6[0],
+      setFilteredBlsArr = _useState6[1];
+
   var updateMedia = function updateMedia() {
     setDesktop(window.innerWidth > 1025);
   };
@@ -36216,7 +36258,14 @@ var Products = function Products() {
       return window.removeEventListener("resize", updateMedia);
     };
   });
-  return _react.default.createElement("div", null, _react.default.createElement(_TopNav.default, null), _react.default.createElement(_Displayarea.default, null), _react.default.createElement(_Bottomfiltersnav.default, null), isDesktop ? _react.default.createElement("section", null, _react.default.createElement(_Productscardarea.default, null), " ", _react.default.createElement(_Filtersdropdownarea.default, null)) : _react.default.createElement(_Productscardarea.default, null));
+  return _react.default.createElement("div", null, _react.default.createElement(_TopNav.default, null), _react.default.createElement(_Displayarea.default, null), _react.default.createElement(_Bottomfiltersnav.default, null), isDesktop ? _react.default.createElement("section", null, _react.default.createElement(_Productscardarea.default, {
+    filteredBrandsArr: filteredBrandsArr
+  }), " ", _react.default.createElement(_Filtersdropdownarea.default, {
+    filteredBrandsArr: filteredBrandsArr,
+    setFilteredBrandsArr: setFilteredBrandsArr,
+    filteredBlsArr: filteredBlsArr,
+    setFilteredBlsArr: setFilteredBlsArr
+  })) : _react.default.createElement(_Productscardarea.default, null));
 };
 
 var _default = Products;
@@ -36303,7 +36352,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60239" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52775" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
