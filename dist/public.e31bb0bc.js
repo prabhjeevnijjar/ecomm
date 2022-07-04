@@ -35545,15 +35545,19 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _reactRouterDom = require("react-router-dom");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Home = function Home() {
-  return _react.default.createElement("div", null, _react.default.createElement("h1", null, "Home Page"), _react.default.createElement("h2", null, "Dog "), _react.default.createElement("h2", null, "Cat"));
+  return _react.default.createElement("div", null, _react.default.createElement("h1", null, "Home Page"), _react.default.createElement("h2", null, " ", _react.default.createElement(_reactRouterDom.Link, {
+    to: "/products"
+  }, "Dog"), "  "), _react.default.createElement("h2", null, "Cat"));
 };
 
 var _default = Home;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/index.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -36299,7 +36303,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52969" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60239" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
