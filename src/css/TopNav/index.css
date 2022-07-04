@@ -34,7 +34,7 @@ ul {
   margin-right: 0.7rem;
   width: 3px;
 }
-ul li + li:before {
+.nav ul li + li:before {
   padding: 8px;
   color: white;
   content: "/\00a0";

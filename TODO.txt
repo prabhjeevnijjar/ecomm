@@ -5,16 +5,16 @@
 [X] Create Routes
 
 [X] Component Files
-    [] Individual card
+    [X] Individual card
     [] Search filter
-    [] All Cards
-    [] Featured slideshow
+    [X] All Cards
+    [X] Featured image
     [X] Breadcrumb
     [] Mobile Filter
     [] Web Filter
 [X] Pages
     [X] Home
-    [] Products
+    [X] Products
     [] 404 page not found
 
 NOTE:

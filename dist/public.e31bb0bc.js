@@ -35723,7 +35723,19 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/Filtersdropdownarea.js":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/constants/filters.js":[function(require,module,exports) {
+var dogFoodVegNonVegType = ["Veg", "Non-Veg"];
+var dogFoodBrands = ["Acana", "Arden Grange", "BRUNO'S WILD Essentials", "Canine Creek", "Chappi", "Drools", "Farmina", "Fish4Dogs", "Heads Up For Tails", "Hill's", "IAMS", "Orijen", "Pedigree", "Purina", "Royal Canin", "Taste Of The Wild"];
+var dogBreedLifeStage = ["Starter", "Puppy", "Adult", "Senior", "Lactating-Mother"]; // dog breeds data picked from https://github.com/dariusk/corpora/blob/master/data/animals/dogs.json
+
+var dogBreeds = ["Bracco Italiano", "Braque d'Auvergne", "Braque du Bourbonnais", "Braque du Puy", "Braque Francais", "Braque Saint-Germain", "Brazilian Terrier", "Chien-gris", "Chihuahua", "Chilean Fox Terrier", "Chinese Chongqing Dog", "Chinese Crested Dog", "Chinese Imperial Dog", "Cumberland Sheepdog", "Curly Coated Retriever", "Cursinu", "Cão da Serra de Aires", "Cão de Castro Laboreiro", "Cão Fila de São Miguel", "Dachshund", "Dalmatian", "Dandie Dinmont Terrier", "Danish Swedish Farmdog", "Dutch Smoushond", "East Siberian Laika", "East-European Shepherd", "Elo", "English Cocker Spaniel", "English Foxhound", "English Mastiff", "English Setter", "English Shepherd", "English Springer Spaniel", "French Bulldog", "French Spaniel", "Galgo Español", "Gascon Saintongeois", "German Longhaired Pointer", "German Pinscher", "Great Dane", "Griffon Bleu de Gascogne", "Griffon Bruxellois", "Griffon Fauve de Bretagne"];
+module.exports = {
+  dogFoodVegNonVegType: dogFoodVegNonVegType,
+  dogFoodBrands: dogFoodBrands,
+  dogBreedLifeStage: dogBreedLifeStage,
+  dogBreeds: dogBreeds
+};
+},{}],"../src/components/Filtersdropdownarea.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35731,21 +35743,233 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 require("../css/Filtersdropdownarea/index.css");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _filters = require("../constants/filters");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var Filtersdropdownarea = function Filtersdropdownarea() {
+  var _useState = (0, _react.useState)(new Array(_filters.dogFoodBrands.length).fill(false)),
+      _useState2 = _slicedToArray(_useState, 2),
+      checkedBrandsState = _useState2[0],
+      setCheckedBrandsState = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(new Array(_filters.dogBreedLifeStage.length).fill(false)),
+      _useState4 = _slicedToArray(_useState3, 2),
+      checkedBlsState = _useState4[0],
+      setCheckedBlsState = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(new Array(_filters.dogBreeds.length).fill(false)),
+      _useState6 = _slicedToArray(_useState5, 2),
+      checkedBreedsState = _useState6[0],
+      setCheckedBreedsState = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(new Array(_filters.dogFoodVegNonVegType.length).fill(false)),
+      _useState8 = _slicedToArray(_useState7, 2),
+      checkedTofState = _useState8[0],
+      setCheckedTofState = _useState8[1]; //selected filter values are stored in this array
+
+
+  var _useState9 = (0, _react.useState)([]),
+      _useState10 = _slicedToArray(_useState9, 2),
+      filteredBrandsArr = _useState10[0],
+      setFilteredBrandsArr = _useState10[1]; // BRANDS //
+
+
+  var handleBrandsOnChange = function handleBrandsOnChange(position) {
+    var updatedCheckedBrandState = checkedBrandsState.map(function (item, index) {
+      return index === position ? !item : item;
+    });
+    setCheckedBrandsState(updatedCheckedBrandState);
+    console.log("ais", checkedBrandsState);
+  }; // BREED LIFESTYLE AGE (Bls)//
+
+
+  var handleBlsOnChange = function handleBlsOnChange(position) {
+    setCheckedBlsState(checkedBlsState.map(function (item, index) {
+      return index === position ? !item : item;
+    }));
+    console.log("Bls", checkedBlsState);
+  }; // BREEDS //
+
+
+  var handleBreedsOnChange = function handleBreedsOnChange(position) {
+    setCheckedBreedsState(checkedBreedsState.map(function (item, index) {
+      return index === position ? !item : item;
+    }));
+    console.log("Bls", checkedBreedsState);
+  }; // TYPE OF FOOD (Tof)//
+
+
+  var handleTofOnChange = function handleTofOnChange(position) {
+    setCheckedTofState(checkedTofState.map(function (item, index) {
+      return index === position ? !item : item;
+    }));
+    console.log("Tof", checkedTofState);
+  }; // ON CLICK APPLY FILTERS
+  // create a object containing key value pairs of filters with true value in its array
+
+
+  var handleApplyFiltersOnClick = function handleApplyFiltersOnClick() {
+    //find in checkedBrandsState array true positions
+    var filteredBrandsValues = [];
+
+    for (var i = 0; i < checkedBrandsState.length; i++) {
+      if (checkedBrandsState[i] === true) {
+        filteredBrandsValues.push(_filters.dogFoodBrands[i]);
+      }
+    } // filteredBrandsValues.map(data=>console.log(data))
+
+
+    if (filteredBrandsValues.length > 0) {
+      setFilteredBrandsArr(filteredBrandsValues); // filteredBrandsValues.map(data=>console.log(data))
+    }
+  }; // const filteredBrandValues = checkedBrandsState.filter(
+  //   // (checkedBrandsState,i) => checkedBrandsState[i] === true
+  //   function (value, i) {
+  //     if (value === true) return dogFoodBrands[i];
+  //   }
+  // );
+  // filteredBrandsArr.map((data) => console.log(data));
+  // console.log("true values", JSON.stringify(filteredBrandsArr));
+  // for (let i = 0; i < checkedBrandsState.length; i++) {
+  //   // let filteredBrandsArr = [];
+  //   if (checkedBrandsState[i] === true) {
+  //     // filteredBrandsArr.push = dogFoodBrands[i];
+  //     // filteredBrandsArr.push(dogFoodBrands[i]);
+  //     setFilteredBrandsArr((oldArray) => [...oldArray, dogFoodBrands[i]]);
+  //     // setTheArray(oldArray => [...oldArray, newElement]);
+  //     // console.log("true pos", brandsArr[i]);
+  //   }
+  // }
+  // console.log("breed filters", filteredBrandsArr);
+
+
   return _react.default.createElement("section", {
     className: "filtersarea"
-  }, "Filter dropdown area");
+  }, _react.default.createElement("section", {
+    className: "filtersarea_brands"
+  }, _react.default.createElement("section", {
+    className: "filtersarea_brands heading "
+  }, _react.default.createElement("h4", null, "Brands"), _react.default.createElement("ul", {
+    className: "filtersarea_list"
+  }, _filters.dogFoodBrands.map(function (name, index) {
+    return _react.default.createElement("li", {
+      key: index
+    }, _react.default.createElement("div", {
+      className: "filtersarea_list-item"
+    }, _react.default.createElement("input", {
+      type: "checkbox",
+      id: "custom-checkbox-".concat(index),
+      name: name,
+      value: name,
+      checked: checkedBrandsState[index],
+      onChange: function onChange() {
+        return handleBrandsOnChange(index);
+      }
+    }), _react.default.createElement("label", {
+      key: index
+    }, name)));
+  }))), _react.default.createElement("section", {
+    className: "filtersarea_brands_filters"
+  })), _react.default.createElement("section", {
+    className: "filtersarea_breedlifestage"
+  }, _react.default.createElement("section", {
+    className: "filtersarea_breedlifestage heading"
+  }, _react.default.createElement("h4", null, "Breed Lifestyle Age"), _react.default.createElement("ul", {
+    className: "filtersarea_list"
+  }, _filters.dogBreedLifeStage.map(function (name, index) {
+    return _react.default.createElement("li", {
+      key: index
+    }, _react.default.createElement("div", {
+      className: "filtersarea_list-item"
+    }, _react.default.createElement("input", {
+      type: "checkbox",
+      id: "custom-checkbox-".concat(index),
+      name: name,
+      value: name,
+      checked: checkedBlsState[index],
+      onChange: function onChange() {
+        return handleBlsOnChange(index);
+      }
+    }), _react.default.createElement("label", {
+      key: index
+    }, name)));
+  }))), _react.default.createElement("section", {
+    className: "filtersarea_breedlifestage_filters"
+  })), _react.default.createElement("section", {
+    className: "filtersarea_breeds"
+  }, _react.default.createElement("section", {
+    className: "filtersarea_breeds heading"
+  }, _react.default.createElement("h4", null, "Breeds"), _react.default.createElement("ul", {
+    className: "filtersarea_list"
+  }, _filters.dogBreeds.map(function (name, index) {
+    return _react.default.createElement("li", {
+      key: index
+    }, _react.default.createElement("div", {
+      className: "filtersarea_list-item"
+    }, _react.default.createElement("input", {
+      type: "checkbox",
+      id: "custom-checkbox-".concat(index),
+      name: name,
+      value: name,
+      checked: checkedBreedsState[index],
+      onChange: function onChange() {
+        return handleBreedsOnChange(index);
+      }
+    }), _react.default.createElement("label", {
+      key: index
+    }, name)));
+  }))), _react.default.createElement("section", {
+    className: "filtersarea_breeds_filters"
+  })), _react.default.createElement("section", {
+    className: "filtersarea_foodtype"
+  }, _react.default.createElement("section", {
+    className: "filtersarea_foodtype heading"
+  }, _react.default.createElement("h4", null, "Food Type"), _react.default.createElement("ul", {
+    className: "filtersarea_list"
+  }, _filters.dogFoodVegNonVegType.map(function (name, index) {
+    return _react.default.createElement("li", {
+      key: index
+    }, _react.default.createElement("div", {
+      className: "filtersarea_list-item"
+    }, _react.default.createElement("input", {
+      type: "checkbox",
+      id: "custom-checkbox-".concat(index),
+      name: name,
+      value: name,
+      checked: checkedTofState[index],
+      onChange: function onChange() {
+        return handleTofOnChange(index);
+      }
+    }), _react.default.createElement("label", {
+      key: index
+    }, name)));
+  }))), _react.default.createElement("section", {
+    className: "filtersarea_foodtype_filters"
+  })));
 };
 
 var _default = Filtersdropdownarea;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","../css/Filtersdropdownarea/index.css":"../src/css/Filtersdropdownarea/index.css"}],"../src/css/Productscardarea/index.css":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","../css/Filtersdropdownarea/index.css":"../src/css/Filtersdropdownarea/index.css","../constants/filters":"../src/constants/filters.js"}],"../src/css/Productscardarea/index.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -35755,7 +35979,11 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/Productcard.js":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/assets/cart_icon.png":[function(require,module,exports) {
+module.exports = "/cart_icon.111fe3da.png";
+},{}],"../src/assets/fav_icon.png":[function(require,module,exports) {
+module.exports = "/fav_icon.af6b5294.png";
+},{}],"../src/components/Productcard.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35767,10 +35995,15 @@ var _react = _interopRequireDefault(require("react"));
 
 require("../css/Productcard/index.css");
 
+var _cart_icon = _interopRequireDefault(require("../assets/cart_icon.png"));
+
+var _fav_icon = _interopRequireDefault(require("../assets/fav_icon.png"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Productcard = function Productcard() {
+var Productcard = function Productcard(props) {
   //pass props for all cards here
+  console.log("product card", props.props.brand);
   return _react.default.createElement("section", {
     className: "individualcard"
   }, _react.default.createElement("section", {
@@ -35778,23 +36011,76 @@ var Productcard = function Productcard() {
   }, _react.default.createElement("section", {
     className: "individualcard__img"
   }, _react.default.createElement("img", {
-    src: "https://cdn.shopify.com/s/files/1/0086/0795/7054/products/AcanaLargeBreedAdultDryDogFood_510x@2x.jpg?v=1637579082"
+    src: props.props.productImage
   })), _react.default.createElement("section", {
     className: "individualcard__name"
-  }, _react.default.createElement("p", null, "This is product description for product lorem ipsum lorem ipsim")), _react.default.createElement("section", {
+  }, _react.default.createElement("p", null, props.props.productName)), _react.default.createElement("section", {
     className: "individualcard__price"
-  }, _react.default.createElement("p", null, _react.default.createElement("b", null, "\u20B9800")))), _react.default.createElement("section", {
+  }, _react.default.createElement("p", null, _react.default.createElement("b", null, "\u20B9", props.props.price)))), _react.default.createElement("section", {
     className: "individualcard__actions"
   }, _react.default.createElement("section", {
     className: "individualcard__actions_fav"
-  }), _react.default.createElement("section", {
+  }, _react.default.createElement("img", {
+    src: _fav_icon.default
+  })), _react.default.createElement("section", {
     className: "individualcard__actions_atc"
-  })));
+  }, _react.default.createElement("img", {
+    src: _cart_icon.default
+  }), _react.default.createElement("p", null, "Add to cart"))));
 };
 
 var _default = Productcard;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","../css/Productcard/index.css":"../src/css/Productcard/index.css"}],"../src/components/Productscardarea.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","../css/Productcard/index.css":"../src/css/Productcard/index.css","../assets/cart_icon.png":"../src/assets/cart_icon.png","../assets/fav_icon.png":"../src/assets/fav_icon.png"}],"../src/data/dogFoodData.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var dogFoodProductsData = [{
+  id: "1",
+  foodCategory: "dog",
+  brand: "Acana",
+  productImage: "https://cdn.shopify.com/s/files/1/0086/0795/7054/products/AcanaLargeBreedAdultDryDogFood_510x@2x.jpg?v=1637579082",
+  productName: "Acana Large Breed Dry Puppy Food",
+  tagLine: "High protein, grain-free, easy to digest dog food",
+  breedLifeStage: "Adult",
+  breed: ["English Mastiff", "Great Dane", "Grey Hound", "St. Bernard"],
+  foodType: "Non Veg",
+  foodWeight: "11.4kg",
+  price: "399",
+  dateAdded: "1656744775250"
+}, {
+  id: "2",
+  foodCategory: "dog",
+  brand: "Acana",
+  productImage: "https://cdn.shopify.com/s/files/1/0086/0795/7054/products/AcanaSmallBreedAdultDryDogFood_1492e7a3-a678-4325-aa18-5b06c12d53ed_510x@2x.jpg?v=1637579203",
+  productName: "Acana Small Breed Adult Dry Dog Food",
+  tagLine: "High-quality, grain-free, safe, international dog food",
+  breedLifeStage: "Adult",
+  breed: ["Chihuahua", "Pug", "Yorkshire Terrier", "Corgi", "Brussels Griffon", "Coton de Tulear"],
+  foodType: "Non Veg",
+  foodWeight: "12.4kg",
+  price: "499",
+  dateAdded: "1656744782550"
+}, {
+  id: "3",
+  foodCategory: "dog",
+  brand: "Pedigree",
+  productImage: "https://cdn.shopify.com/s/files/1/0565/8021/0861/products/61lqaZpAv_S-compressed_10f3b9ea-0363-4e75-b76f-ad2b265d22d1_1800x1800.jpg?v=1655874200",
+  productName: "Pedigree Meat & Milk Puppy Dry Food",
+  tagLine: "Complete & balanced dog food, a perfect food for puppy",
+  breedLifeStage: "Puppy",
+  breed: ["Chihuahua", "Chien-gris", "Yorkshire Terrier", "Corgi", "Brussels Griffon", "Coton de Tulear"],
+  foodType: "Non Veg",
+  foodWeight: "3kg",
+  price: "646",
+  dateAdded: "1656744782550"
+}];
+var _default = dogFoodProductsData;
+exports.default = _default;
+},{}],"../src/components/Productscardarea.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35802,24 +36088,34 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 require("../css/Productscardarea/index.css");
 
 var _Productcard = _interopRequireDefault(require("./Productcard"));
 
+var _dogFoodData = _interopRequireDefault(require("../data/dogFoodData"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
 var Productscardarea = function Productscardarea() {
-  //pass props for all cards here
   return _react.default.createElement("section", {
     className: "cardsarea"
-  }, _react.default.createElement(_Productcard.default, null), _react.default.createElement(_Productcard.default, null), _react.default.createElement(_Productcard.default, null), _react.default.createElement(_Productcard.default, null));
+  }, _dogFoodData.default.map(function (item, i) {
+    // console.log("item ",i," ",itxem)
+    return _react.default.createElement(_Productcard.default, {
+      props: item
+    });
+  }));
 };
 
 var _default = Productscardarea;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","../css/Productscardarea/index.css":"../src/css/Productscardarea/index.css","./Productcard":"../src/components/Productcard.js"}],"../src/css/TopNav/index.css":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","../css/Productscardarea/index.css":"../src/css/Productscardarea/index.css","./Productcard":"../src/components/Productcard.js","../data/dogFoodData":"../src/data/dogFoodData.js"}],"../src/css/TopNav/index.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -36003,7 +36299,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60228" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52969" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

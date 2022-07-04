@@ -1,26 +1,34 @@
 import React from "react";
 import "../css/Productcard/index.css";
-const Productcard = () => {
+import cartIcon from "../assets/cart_icon.png";
+import favIcon from "../assets/fav_icon.png";
+const Productcard = (props) => {
   //pass props for all cards here
+  console.log("product card", props.props.brand);
   return (
     <section className="individualcard">
       <section className="individualcard__padding">
         <section className="individualcard__img">
-          <img src="https://cdn.shopify.com/s/files/1/0086/0795/7054/products/AcanaLargeBreedAdultDryDogFood_510x@2x.jpg?v=1637579082"></img>
+          <img src={props.props.productImage}></img>
         </section>
         <section className="individualcard__name">
-          <p>This is product description for product lorem ipsum lorem ipsim</p>
+          <p>{props.props.productName}</p>
         </section>
         <section className="individualcard__price">
           <p>
-            <b>₹800</b>
+            <b>₹{props.props.price}</b>
           </p>
         </section>
       </section>
 
       <section className="individualcard__actions">
-        <section className="individualcard__actions_fav"></section>
-        <section className="individualcard__actions_atc"></section>
+        <section className="individualcard__actions_fav">
+          <img src={favIcon}></img>
+        </section>
+        <section className="individualcard__actions_atc">
+          <img src={cartIcon}></img>
+          <p>Add to cart</p>
+        </section>
       </section>
     </section>
   );

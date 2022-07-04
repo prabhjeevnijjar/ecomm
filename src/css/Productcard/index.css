@@ -1,8 +1,9 @@
 .individualcard {
-  max-height: 368px;
+  max-height: 333px;
   min-width: 220px;
   max-width: 220px;
-  border: 2px solid lightgray;
+  border: 1px solid lightgray;
+  border-radius: 2px;
   margin: 8px;
   z-index: -1;
 }
@@ -29,7 +30,30 @@
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
-  border-top: 2px solid lightgray;
-  height: 50px;
+  border-top: 1px solid lightgray;
+  height: 40px;
   bottom: 0;
+}
+.individualcard__actions_atc {
+  display: flex;
+  justify-content: space-around;
+  padding: 7px;
+}
+.individualcard__actions_atc img {
+  height: 25px;
+  width: 25px;
+}
+.individualcard__actions_fav {
+  display: flex;
+  justify-content: space-around;
+  padding: 7px;
+}
+.individualcard__actions_fav img {
+  height: 25px;
+  width: 25px;
+}
+.individualcard__actions_fav {
+  width: 30%;
+  height: 40px;
+  border-right: 2px solid lightgray;
 }
