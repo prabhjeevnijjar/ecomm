@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel ./public/index.html --open -p 3000"
+    "start": "parcel ./public/index.html --open -p 3000",
+    "build": "parcel build index.html"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,8 @@
     "regenerator-runtime": "^0.13.9"
   },
   "staticFiles": {
-    "staticPath": ["./src/assets"]
- }
+    "staticPath": [
+      "./src/assets"
+    ]
+  }
 }
