@@ -40,6 +40,9 @@
 .bottomnav__right a {
   font-size: 1.1rem;
 }
+.filtersdiv {
+  top: 0;
+}
 @media only screen and (min-width: 1025px) {
   .bottomnav {
     display: none;
@@ -124,6 +127,40 @@
   /* background-color: blue; */
 }
 
+.collapsible .content {
+  padding: 6px;
+  background-color: #eeeeee;
+}
+.collapsible .header {
+  background-color: #dddddd;
+  padding: 6px;
+  cursor: pointer;
+}
+.button__filter {
+  border: none;
+  color: #fff;
+  border-radius: 0.25rem;
+  letter-spacing: 1px;
+  padding: 3.5px 5px;
+  background: #0f8f9d;
+  min-width: 124px;
+  transition: all 0.2s;
+  margin: 20px;
+}
+.filtersarea_list li {
+  padding: none;
+  margin: none;
+}
+.filtersarea_list-item {
+  display: flex;
+  justify-content: left;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.filtersarea_list-item label {
+  margin-left: 5px;
+}
 
 .cardsarea {
   margin-top: 20px;

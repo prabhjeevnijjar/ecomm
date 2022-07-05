@@ -9,6 +9,8 @@ const Products = () => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1025);
   const [filteredBrandsArr, setFilteredBrandsArr] = useState([]);
   const [filteredBlsArr, setFilteredBlsArr] = useState([]);
+  const [filteredBreedsArr, setFilteredBreedsArr] = useState([]);
+  const [filteredTofArr, setFilteredTofArr] = useState([]);
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1025);
@@ -22,19 +24,45 @@ const Products = () => {
     <div>
       <TopNav />
       <Displayarea />
-      <Bottomfiltersnav />
+      <Bottomfiltersnav>
+        <Filtersdropdownarea
+          filteredBrandsArr={filteredBrandsArr}
+          setFilteredBrandsArr={setFilteredBrandsArr}
+          filteredBlsArr={filteredBlsArr}
+          setFilteredBlsArr={setFilteredBlsArr}
+          filteredBreedsArr={filteredBreedsArr}
+          setFilteredBreedsArr={setFilteredBreedsArr}
+          filteredTofArr={filteredTofArr}
+          setFilteredTofArr={setFilteredTofArr}
+        />
+      </Bottomfiltersnav>
       {isDesktop ? (
         <section>
-          <Productscardarea filteredBrandsArr={filteredBrandsArr} /> <Filtersdropdownarea filteredBrandsArr={filteredBrandsArr} setFilteredBrandsArr={setFilteredBrandsArr} filteredBlsArr={filteredBlsArr} setFilteredBlsArr={setFilteredBlsArr} />
+          <Productscardarea
+            filteredBrandsArr={filteredBrandsArr}
+            filteredBlsArr={filteredBlsArr}
+            filteredBreedsArr={filteredBreedsArr}
+            filteredTofArr={filteredTofArr}
+          />{" "}
+          <Filtersdropdownarea
+            filteredBrandsArr={filteredBrandsArr}
+            setFilteredBrandsArr={setFilteredBrandsArr}
+            filteredBlsArr={filteredBlsArr}
+            setFilteredBlsArr={setFilteredBlsArr}
+            filteredBreedsArr={filteredBreedsArr}
+            setFilteredBreedsArr={setFilteredBreedsArr}
+            filteredTofArr={filteredTofArr}
+            setFilteredTofArr={setFilteredTofArr}
+          />
         </section>
       ) : (
-        <Productscardarea />
+        <Productscardarea
+          filteredBrandsArr={filteredBrandsArr}
+          filteredBlsArr={filteredBlsArr}
+          filteredBreedsArr={filteredBreedsArr}
+          filteredTofArr={filteredTofArr}
+        />
       )}
-      {/* // <Itemscardarea /> */}
-      {/* <Filtersdropdownarea /> */}
-      {/*  a bit of difficulty in deciding either to align them
-      side by side using new component or make a section here and add flex
-      because in mobile screen I will be hiding the left filter part any whay */}
     </div>
   );
 };

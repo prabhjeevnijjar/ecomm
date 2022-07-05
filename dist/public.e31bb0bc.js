@@ -35651,10 +35651,13 @@ var _sort_icon = _interopRequireDefault(require("../assets/sort_icon.png"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Bottomfiltersnav = function Bottomfiltersnav() {
+var Bottomfiltersnav = function Bottomfiltersnav(_ref) {
+  var children = _ref.children;
   return _react.default.createElement("section", {
     className: "bottomnav"
   }, _react.default.createElement("section", {
+    className: "filtersdiv"
+  }, children), _react.default.createElement("section", {
     className: "bottomnav__left"
   }, _react.default.createElement("img", {
     src: _sort_icon.default,
@@ -35664,7 +35667,7 @@ var Bottomfiltersnav = function Bottomfiltersnav() {
   }, _react.default.createElement("img", {
     src: _filter_icon.default,
     alt: "filter icon"
-  }), _react.default.createElement("p", null, "Filters")));
+  }), "sec", _react.default.createElement("p", null, "Filters")));
 };
 
 var _default = Bottomfiltersnav;
@@ -35739,7 +35742,632 @@ module.exports = {
   dogBreedLifeStage: dogBreedLifeStage,
   dogBreeds: dogBreeds
 };
-},{}],"../src/components/Filtersdropdownarea.js":[function(require,module,exports) {
+},{}],"../node_modules/process/browser.js":[function(require,module,exports) {
+
+// shim for using process in browser
+var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+  throw new Error('setTimeout has not been defined');
+}
+
+function defaultClearTimeout() {
+  throw new Error('clearTimeout has not been defined');
+}
+
+(function () {
+  try {
+    if (typeof setTimeout === 'function') {
+      cachedSetTimeout = setTimeout;
+    } else {
+      cachedSetTimeout = defaultSetTimout;
+    }
+  } catch (e) {
+    cachedSetTimeout = defaultSetTimout;
+  }
+
+  try {
+    if (typeof clearTimeout === 'function') {
+      cachedClearTimeout = clearTimeout;
+    } else {
+      cachedClearTimeout = defaultClearTimeout;
+    }
+  } catch (e) {
+    cachedClearTimeout = defaultClearTimeout;
+  }
+})();
+
+function runTimeout(fun) {
+  if (cachedSetTimeout === setTimeout) {
+    //normal enviroments in sane situations
+    return setTimeout(fun, 0);
+  } // if setTimeout wasn't available but was latter defined
+
+
+  if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+    cachedSetTimeout = setTimeout;
+    return setTimeout(fun, 0);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedSetTimeout(fun, 0);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+      return cachedSetTimeout.call(null, fun, 0);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+      return cachedSetTimeout.call(this, fun, 0);
+    }
+  }
+}
+
+function runClearTimeout(marker) {
+  if (cachedClearTimeout === clearTimeout) {
+    //normal enviroments in sane situations
+    return clearTimeout(marker);
+  } // if clearTimeout wasn't available but was latter defined
+
+
+  if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+    cachedClearTimeout = clearTimeout;
+    return clearTimeout(marker);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedClearTimeout(marker);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+      return cachedClearTimeout.call(null, marker);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+      // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+      return cachedClearTimeout.call(this, marker);
+    }
+  }
+}
+
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+  if (!draining || !currentQueue) {
+    return;
+  }
+
+  draining = false;
+
+  if (currentQueue.length) {
+    queue = currentQueue.concat(queue);
+  } else {
+    queueIndex = -1;
+  }
+
+  if (queue.length) {
+    drainQueue();
+  }
+}
+
+function drainQueue() {
+  if (draining) {
+    return;
+  }
+
+  var timeout = runTimeout(cleanUpNextTick);
+  draining = true;
+  var len = queue.length;
+
+  while (len) {
+    currentQueue = queue;
+    queue = [];
+
+    while (++queueIndex < len) {
+      if (currentQueue) {
+        currentQueue[queueIndex].run();
+      }
+    }
+
+    queueIndex = -1;
+    len = queue.length;
+  }
+
+  currentQueue = null;
+  draining = false;
+  runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+  var args = new Array(arguments.length - 1);
+
+  if (arguments.length > 1) {
+    for (var i = 1; i < arguments.length; i++) {
+      args[i - 1] = arguments[i];
+    }
+  }
+
+  queue.push(new Item(fun, args));
+
+  if (queue.length === 1 && !draining) {
+    runTimeout(drainQueue);
+  }
+}; // v8 likes predictible objects
+
+
+function Item(fun, array) {
+  this.fun = fun;
+  this.array = array;
+}
+
+Item.prototype.run = function () {
+  this.fun.apply(null, this.array);
+};
+
+process.title = 'browser';
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) {
+  return [];
+};
+
+process.binding = function (name) {
+  throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () {
+  return '/';
+};
+
+process.chdir = function (dir) {
+  throw new Error('process.chdir is not supported');
+};
+
+process.umask = function () {
+  return 0;
+};
+},{}],"../node_modules/performance-now/lib/performance-now.js":[function(require,module,exports) {
+var process = require("process");
+// Generated by CoffeeScript 1.12.2
+(function() {
+  var getNanoSeconds, hrtime, loadTime, moduleLoadTime, nodeLoadTime, upTime;
+
+  if ((typeof performance !== "undefined" && performance !== null) && performance.now) {
+    module.exports = function() {
+      return performance.now();
+    };
+  } else if ((typeof process !== "undefined" && process !== null) && process.hrtime) {
+    module.exports = function() {
+      return (getNanoSeconds() - nodeLoadTime) / 1e6;
+    };
+    hrtime = process.hrtime;
+    getNanoSeconds = function() {
+      var hr;
+      hr = hrtime();
+      return hr[0] * 1e9 + hr[1];
+    };
+    moduleLoadTime = getNanoSeconds();
+    upTime = process.uptime() * 1e9;
+    nodeLoadTime = moduleLoadTime - upTime;
+  } else if (Date.now) {
+    module.exports = function() {
+      return Date.now() - loadTime;
+    };
+    loadTime = Date.now();
+  } else {
+    module.exports = function() {
+      return new Date().getTime() - loadTime;
+    };
+    loadTime = new Date().getTime();
+  }
+
+}).call(this);
+
+
+
+},{"process":"../node_modules/process/browser.js"}],"../node_modules/raf/index.js":[function(require,module,exports) {
+var global = arguments[3];
+var now = require('performance-now')
+  , root = typeof window === 'undefined' ? global : window
+  , vendors = ['moz', 'webkit']
+  , suffix = 'AnimationFrame'
+  , raf = root['request' + suffix]
+  , caf = root['cancel' + suffix] || root['cancelRequest' + suffix]
+
+for(var i = 0; !raf && i < vendors.length; i++) {
+  raf = root[vendors[i] + 'Request' + suffix]
+  caf = root[vendors[i] + 'Cancel' + suffix]
+      || root[vendors[i] + 'CancelRequest' + suffix]
+}
+
+// Some versions of FF have rAF but not cAF
+if(!raf || !caf) {
+  var last = 0
+    , id = 0
+    , queue = []
+    , frameDuration = 1000 / 60
+
+  raf = function(callback) {
+    if(queue.length === 0) {
+      var _now = now()
+        , next = Math.max(0, frameDuration - (_now - last))
+      last = next + _now
+      setTimeout(function() {
+        var cp = queue.slice(0)
+        // Clear queue here to prevent
+        // callbacks from appending listeners
+        // to the current frame's queue
+        queue.length = 0
+        for(var i = 0; i < cp.length; i++) {
+          if(!cp[i].cancelled) {
+            try{
+              cp[i].callback(last)
+            } catch(e) {
+              setTimeout(function() { throw e }, 0)
+            }
+          }
+        }
+      }, Math.round(next))
+    }
+    queue.push({
+      handle: ++id,
+      callback: callback,
+      cancelled: false
+    })
+    return id
+  }
+
+  caf = function(handle) {
+    for(var i = 0; i < queue.length; i++) {
+      if(queue[i].handle === handle) {
+        queue[i].cancelled = true
+      }
+    }
+  }
+}
+
+module.exports = function(fn) {
+  // Wrap in a new function to prevent
+  // `cancel` potentially being assigned
+  // to the native rAF function
+  return raf.call(root, fn)
+}
+module.exports.cancel = function() {
+  caf.apply(root, arguments)
+}
+module.exports.polyfill = function(object) {
+  if (!object) {
+    object = root;
+  }
+  object.requestAnimationFrame = raf
+  object.cancelAnimationFrame = caf
+}
+
+},{"performance-now":"../node_modules/performance-now/lib/performance-now.js"}],"../node_modules/tiny-warning/dist/tiny-warning.esm.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var isProduction = "development" === 'production';
+
+function warning(condition, message) {
+  if (!isProduction) {
+    if (condition) {
+      return;
+    }
+
+    var text = "Warning: " + message;
+
+    if (typeof console !== 'undefined') {
+      console.warn(text);
+    }
+
+    try {
+      throw Error(text);
+    } catch (x) {}
+  }
+}
+
+var _default = warning;
+exports.default = _default;
+},{}],"../node_modules/react-collapsed/dist/react-collapsed.esm.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = b;
+
+var _react = require("react");
+
+var _reactDom = require("react-dom");
+
+var _raf = _interopRequireDefault(require("raf"));
+
+var _tinyWarning = _interopRequireDefault(require("tiny-warning"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function c() {
+  return c = Object.assign || function (n) {
+    for (var e = 1; e < arguments.length; e++) {
+      var t = arguments[e];
+
+      for (var o in t) Object.prototype.hasOwnProperty.call(t, o) && (n[o] = t[o]);
+    }
+
+    return n;
+  }, c.apply(this, arguments);
+}
+
+function u(n, e) {
+  if (null == n) return {};
+  var t,
+      o,
+      r = {},
+      i = Object.keys(n);
+
+  for (o = 0; o < i.length; o++) e.indexOf(t = i[o]) >= 0 || (r[t] = n[t]);
+
+  return r;
+}
+
+var d = function () {};
+
+function s(n) {
+  return null != n && n.current ? n.current.scrollHeight : ((0, _tinyWarning.default)(!0, "useCollapse was not able to find a ref to the collapse element via `getCollapseProps`. Ensure that the element exposes its `ref` prop. If it exposes the ref prop under a different name (like `innerRef`), use the `refKey` property to change it. Example:\n\n{...getCollapseProps({refKey: 'innerRef'})}"), "auto");
+}
+
+var f = function () {
+  var n = arguments;
+  return function () {
+    var e = arguments;
+    return [].slice.call(n).forEach(function (n) {
+      return n && n.apply(void 0, [].slice.call(e));
+    });
+  };
+};
+
+function p(n, e) {
+  if (null != n) if ("function" == typeof n) n(e);else try {
+    n.current = e;
+  } catch (t) {
+    throw new Error('Cannot assign value "' + e + '" to ref "' + n + '"');
+  }
+}
+
+var h = "undefined" != typeof window ? _react.useLayoutEffect : _react.useEffect,
+    v = !1,
+    g = 0,
+    m = function () {
+  return ++g;
+},
+    x = ["duration", "easing", "collapseStyles", "expandStyles", "onExpandStart", "onExpandEnd", "onCollapseStart", "onCollapseEnd", "isExpanded", "defaultExpanded", "hasDisabledAnimation"],
+    y = ["disabled", "onClick"],
+    E = ["style", "onTransitionEnd", "refKey"];
+
+function b(r) {
+  var g,
+      b,
+      C = void 0 === r ? {} : r,
+      w = C.duration,
+      S = C.easing,
+      k = void 0 === S ? "cubic-bezier(0.4, 0, 0.2, 1)" : S,
+      O = C.collapseStyles,
+      P = void 0 === O ? {} : O,
+      T = C.expandStyles,
+      D = void 0 === T ? {} : T,
+      K = C.onExpandStart,
+      j = void 0 === K ? d : K,
+      N = C.onExpandEnd,
+      z = void 0 === N ? d : N,
+      A = C.onCollapseStart,
+      H = void 0 === A ? d : A,
+      I = C.onCollapseEnd,
+      M = void 0 === I ? d : I,
+      R = C.isExpanded,
+      q = C.defaultExpanded,
+      B = void 0 !== q && q,
+      V = C.hasDisabledAnimation,
+      _ = void 0 !== V && V,
+      F = u(C, x),
+      G = function (r, i) {
+    var l = (0, _react.useState)(i || !1),
+        c = l[0],
+        u = l[1],
+        d = (0, _react.useRef)(null != r),
+        s = d.current ? r : c,
+        f = (0, _react.useCallback)(function (n) {
+      d.current || u(n);
+    }, []);
+    return (0, _react.useEffect)(function () {
+      (0, _tinyWarning.default)(!(d.current && null == r), "useCollapse is changing from controlled to uncontrolled. useCollapse should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled collapse for the lifetime of the component. Check the `isExpanded` prop."), (0, _tinyWarning.default)(!(!d.current && null != r), "useCollapse is changing from uncontrolled to controlled. useCollapse should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled collapse for the lifetime of the component. Check the `isExpanded` prop.");
+    }, [r]), [s, f];
+  }(R, B),
+      J = G[0],
+      L = G[1],
+      Q = function (e) {
+    var t = v ? m() : null,
+        r = (0, _react.useState)(t),
+        i = r[0],
+        l = r[1];
+    return h(function () {
+      null === i && l(m());
+    }, []), (0, _react.useEffect)(function () {
+      !1 === v && (v = !0);
+    }, []), null != i ? String(i) : void 0;
+  }(),
+      U = (0, _react.useRef)(null);
+
+  g = U, b = function (n) {}, "production" !== "development" && (b = function (n) {
+    if (null != n && n.current) {
+      var e = window.getComputedStyle(n.current),
+          t = e.paddingTop,
+          o = e.paddingBottom;
+      (0, _tinyWarning.default)(!(t && "0px" !== t || o && "0px" !== o), "react-collapsed: Padding applied to the collapse element will cause the animation to break and not perform as expected. To fix, apply equivalent padding to the direct descendent of the collapse element.");
+    }
+  }), (0, _react.useEffect)(function () {
+    b(g);
+  }, [g]);
+
+  var W,
+      X,
+      Y,
+      Z = (F.collapsedHeight || 0) + "px",
+      $ = {
+    display: "0px" === Z ? "none" : "block",
+    height: Z,
+    overflow: "hidden"
+  },
+      nn = (0, _react.useState)(J ? {} : $),
+      en = nn[0],
+      tn = nn[1],
+      on = function (n) {
+    (0, _reactDom.flushSync)(function () {
+      tn(n);
+    });
+  },
+      rn = function (n) {
+    on(function (e) {
+      return c({}, e, n);
+    });
+  };
+
+  function ln(n) {
+    if (_) return {};
+
+    var e = w || function (n) {
+      if (!n || "string" == typeof n) return 0;
+      var e = n / 36;
+      return Math.round(10 * (4 + 15 * Math.pow(e, .25) + e / 5));
+    }(n);
+
+    return {
+      transition: "height " + e + "ms " + k
+    };
+  }
+
+  W = function () {
+    (0, _raf.default)(J ? function () {
+      j(), rn(c({}, D, {
+        willChange: "height",
+        display: "block",
+        overflow: "hidden"
+      })), (0, _raf.default)(function () {
+        var n = s(U);
+        rn(c({}, ln(n), {
+          height: n
+        }));
+      });
+    } : function () {
+      H();
+      var n = s(U);
+      rn(c({}, P, ln(n), {
+        willChange: "height",
+        height: n
+      })), (0, _raf.default)(function () {
+        rn({
+          height: Z,
+          overflow: "hidden"
+        });
+      });
+    });
+  }, X = [J, Z], Y = (0, _react.useRef)(!0), (0, _react.useEffect)(function () {
+    if (!Y.current) return W();
+    Y.current = !1;
+  }, X);
+
+  var an = function (n) {
+    if (n.target === U.current && "height" === n.propertyName) if (J) {
+      var e = s(U);
+      e === en.height ? on({}) : rn({
+        height: e
+      }), z();
+    } else en.height === Z && (on($), M());
+  };
+
+  return {
+    getToggleProps: function (n) {
+      var e = void 0 === n ? {} : n,
+          t = e.disabled,
+          o = void 0 !== t && t,
+          r = e.onClick,
+          i = void 0 === r ? d : r,
+          l = u(e, y);
+      return c({
+        type: "button",
+        role: "button",
+        id: "react-collapsed-toggle-" + Q,
+        "aria-controls": "react-collapsed-panel-" + Q,
+        "aria-expanded": J,
+        tabIndex: 0,
+        disabled: o
+      }, l, {
+        onClick: o ? d : f(i, function () {
+          return L(function (n) {
+            return !n;
+          });
+        })
+      });
+    },
+    getCollapseProps: function (n) {
+      var e,
+          t = void 0 === n ? {} : n,
+          o = t.style,
+          r = void 0 === o ? {} : o,
+          i = t.onTransitionEnd,
+          l = void 0 === i ? d : i,
+          a = t.refKey,
+          s = void 0 === a ? "ref" : a,
+          h = u(t, E);
+      return c({
+        id: "react-collapsed-panel-" + Q,
+        "aria-hidden": !J
+      }, h, ((e = {})[s] = function () {
+        var n = [].slice.call(arguments);
+        return n.every(function (n) {
+          return null == n;
+        }) ? null : function (e) {
+          n.forEach(function (n) {
+            p(n, e);
+          });
+        };
+      }(U, h[s]), e.onTransitionEnd = f(an, l), e.style = c({
+        boxSizing: "border-box"
+      }, r, en), e));
+    },
+    isExpanded: J,
+    setExpanded: L
+  };
+}
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","raf":"../node_modules/raf/index.js","tiny-warning":"../node_modules/tiny-warning/dist/tiny-warning.esm.js"}],"../src/components/Filtersdropdownarea.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35754,6 +36382,12 @@ var _reactRouterDom = require("react-router-dom");
 require("../css/Filtersdropdownarea/index.css");
 
 var _filters = require("../constants/filters");
+
+var _reactCollapsed = _interopRequireDefault(require("react-collapsed"));
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -35777,7 +36411,16 @@ var Filtersdropdownarea = function Filtersdropdownarea(_ref) {
   var filteredBrandsArr = _ref.filteredBrandsArr,
       setFilteredBrandsArr = _ref.setFilteredBrandsArr,
       filteredBlsArr = _ref.filteredBlsArr,
-      setFilteredBlsArr = _ref.setFilteredBlsArr;
+      setFilteredBlsArr = _ref.setFilteredBlsArr,
+      filteredBreedsArr = _ref.filteredBreedsArr,
+      setFilteredBreedsArr = _ref.setFilteredBreedsArr,
+      filteredTofArr = _ref.filteredTofArr,
+      setFilteredTofArr = _ref.setFilteredTofArr;
+
+  var _useCollapse = (0, _reactCollapsed.default)(),
+      getCollapseProps = _useCollapse.getCollapseProps,
+      getToggleProps = _useCollapse.getToggleProps,
+      isExpanded = _useCollapse.isExpanded;
 
   var _useState = (0, _react.useState)(new Array(_filters.dogFoodBrands.length).fill(false)),
       _useState2 = _slicedToArray(_useState, 2),
@@ -35826,7 +36469,7 @@ var Filtersdropdownarea = function Filtersdropdownarea(_ref) {
     setCheckedBreedsState(checkedBreedsState.map(function (item, index) {
       return index === position ? !item : item;
     }));
-    console.log("Bls", checkedBreedsState);
+    console.log("Breeds", checkedBreedsState);
   }; // TYPE OF FOOD (Tof)//
 
 
@@ -35836,11 +36479,12 @@ var Filtersdropdownarea = function Filtersdropdownarea(_ref) {
     }));
     console.log("Tof", checkedTofState);
   }; // ON CLICK APPLY FILTERS
-  // create a object containing key value pairs of filters with true value in its array
 
 
   var handleApplyFiltersOnClick = function handleApplyFiltersOnClick() {
     //find in checkedBrandsState array true positions
+    var queryObject = {}; // BRANDS //
+
     var filteredBrandsValues = [];
 
     for (var i = 0; i < checkedBrandsState.length; i++) {
@@ -35851,6 +36495,8 @@ var Filtersdropdownarea = function Filtersdropdownarea(_ref) {
 
     if (filteredBrandsValues.length > 0) {
       setFilteredBrandsArr(filteredBrandsValues);
+      var qString = filteredBrandsValues.join(",");
+      queryObject.brands = qString;
     } // BLS //
 
 
@@ -35864,14 +36510,42 @@ var Filtersdropdownarea = function Filtersdropdownarea(_ref) {
 
     if (filteredBlsValues.length > 0) {
       setFilteredBlsArr(filteredBlsValues);
+      var qString2 = filteredBlsValues.join(",");
+      queryObject.bls = qString2;
+    } // BREEDS //
+
+
+    var filteredBreedsValues = [];
+
+    for (var _i3 = 0; _i3 < checkedBreedsState.length; _i3++) {
+      if (checkedBreedsState[_i3] === true) {
+        filteredBreedsValues.push(_filters.dogBreeds[_i3]);
+      }
     }
 
-    var qString = filteredBrandsValues.join(",");
-    var qString2 = filteredBlsValues.join(",");
-    setSearchParams({
-      brands: qString,
-      bls: qString2
-    });
+    if (filteredBreedsValues.length > 0) {
+      setFilteredBreedsArr(filteredBreedsValues);
+      var qString3 = filteredBreedsValues.join(",");
+      queryObject.breeds = qString3;
+    } // TYPE OF FOOD (Tof)//
+
+
+    var filteredTofValues = [];
+
+    for (var _i4 = 0; _i4 < checkedTofState.length; _i4++) {
+      if (checkedTofState[_i4] === true) {
+        filteredTofValues.push(_filters.dogFoodVegNonVegType[_i4]);
+      }
+    }
+
+    if (filteredTofValues.length > 0) {
+      setFilteredTofArr(filteredTofValues);
+      var qString4 = filteredTofValues.join(",");
+      queryObject.tof = qString4;
+    }
+
+    var qStrg4 = filteredTofValues.join(",");
+    setSearchParams(queryObject);
   };
 
   (0, _react.useEffect)(function () {
@@ -35883,7 +36557,7 @@ var Filtersdropdownarea = function Filtersdropdownarea(_ref) {
         var entry = _step.value;
         console.log("USE EFFECT", entry);
         console.log("Section", entry[0]);
-        var val = entry[1].split(',');
+        var val = entry[1].split(",");
         console.log("Values", val);
       }
     } catch (err) {
@@ -35898,9 +36572,13 @@ var Filtersdropdownarea = function Filtersdropdownarea(_ref) {
     className: "filtersarea_brands"
   }, _react.default.createElement("section", {
     className: "filtersarea_brands heading "
-  }, _react.default.createElement("h4", null, "Brands"), _react.default.createElement("button", {
-    onClick: handleApplyFiltersOnClick
-  }, "Test"), _react.default.createElement("ul", {
+  }, _react.default.createElement("h4", null, "Brands"), _react.default.createElement("div", {
+    className: "collapsible"
+  }, _react.default.createElement("div", _extends({
+    className: "header"
+  }, getToggleProps()), isExpanded ? "Collapse" : "Click to expand all filters"), _react.default.createElement("div", getCollapseProps(), _react.default.createElement("div", {
+    className: "content"
+  }, _react.default.createElement("ul", {
     className: "filtersarea_list"
   }, _filters.dogFoodBrands.map(function (name, index) {
     return _react.default.createElement("li", {
@@ -35919,13 +36597,19 @@ var Filtersdropdownarea = function Filtersdropdownarea(_ref) {
     }), _react.default.createElement("label", {
       key: index
     }, name)));
-  }))), _react.default.createElement("section", {
+  })))))), _react.default.createElement("section", {
     className: "filtersarea_brands_filters"
   })), _react.default.createElement("section", {
     className: "filtersarea_breedlifestage"
   }, _react.default.createElement("section", {
     className: "filtersarea_breedlifestage heading"
-  }, _react.default.createElement("h4", null, "Breed Lifestyle Age"), _react.default.createElement("ul", {
+  }, _react.default.createElement("h4", null, "Breed Lifestyle Age"), _react.default.createElement("div", {
+    className: "collapsible"
+  }, _react.default.createElement("div", _extends({
+    className: "header"
+  }, getToggleProps())), _react.default.createElement("div", getCollapseProps(), _react.default.createElement("div", {
+    className: "content"
+  }, _react.default.createElement("ul", {
     className: "filtersarea_list"
   }, _filters.dogBreedLifeStage.map(function (name, index) {
     return _react.default.createElement("li", {
@@ -35944,13 +36628,19 @@ var Filtersdropdownarea = function Filtersdropdownarea(_ref) {
     }), _react.default.createElement("label", {
       key: index
     }, name)));
-  }))), _react.default.createElement("section", {
+  })))))), _react.default.createElement("section", {
     className: "filtersarea_breedlifestage_filters"
   })), _react.default.createElement("section", {
     className: "filtersarea_breeds"
   }, _react.default.createElement("section", {
     className: "filtersarea_breeds heading"
-  }, _react.default.createElement("h4", null, "Breeds"), _react.default.createElement("ul", {
+  }, _react.default.createElement("h4", null, "Breeds"), _react.default.createElement("div", {
+    className: "collapsible"
+  }, _react.default.createElement("div", _extends({
+    className: "header"
+  }, getToggleProps())), _react.default.createElement("div", getCollapseProps(), _react.default.createElement("div", {
+    className: "content"
+  }, _react.default.createElement("ul", {
     className: "filtersarea_list"
   }, _filters.dogBreeds.map(function (name, index) {
     return _react.default.createElement("li", {
@@ -35969,13 +36659,19 @@ var Filtersdropdownarea = function Filtersdropdownarea(_ref) {
     }), _react.default.createElement("label", {
       key: index
     }, name)));
-  }))), _react.default.createElement("section", {
+  })))))), _react.default.createElement("section", {
     className: "filtersarea_breeds_filters"
   })), _react.default.createElement("section", {
     className: "filtersarea_foodtype"
   }, _react.default.createElement("section", {
     className: "filtersarea_foodtype heading"
-  }, _react.default.createElement("h4", null, "Food Type"), _react.default.createElement("ul", {
+  }, _react.default.createElement("h4", null, "Food Type"), _react.default.createElement("div", {
+    className: "collapsible"
+  }, _react.default.createElement("div", _extends({
+    className: "header"
+  }, getToggleProps())), _react.default.createElement("div", getCollapseProps(), _react.default.createElement("div", {
+    className: "content"
+  }, _react.default.createElement("ul", {
     className: "filtersarea_list"
   }, _filters.dogFoodVegNonVegType.map(function (name, index) {
     return _react.default.createElement("li", {
@@ -35994,14 +36690,15 @@ var Filtersdropdownarea = function Filtersdropdownarea(_ref) {
     }), _react.default.createElement("label", {
       key: index
     }, name)));
-  }))), _react.default.createElement("section", {
-    className: "filtersarea_foodtype_filters"
-  })));
+  })))))), _react.default.createElement("button", {
+    className: "button__filter",
+    onClick: handleApplyFiltersOnClick
+  }, "Apply filters")));
 };
 
 var _default = Filtersdropdownarea;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/index.js","../css/Filtersdropdownarea/index.css":"../src/css/Filtersdropdownarea/index.css","../constants/filters":"../src/constants/filters.js"}],"../src/css/Productscardarea/index.css":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/index.js","../css/Filtersdropdownarea/index.css":"../src/css/Filtersdropdownarea/index.css","../constants/filters":"../src/constants/filters.js","react-collapsed":"../node_modules/react-collapsed/dist/react-collapsed.esm.js"}],"../src/css/Productscardarea/index.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -36134,14 +36831,51 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 var Productscardarea = function Productscardarea(_ref) {
-  var filteredBrandsArr = _ref.filteredBrandsArr;
+  var filteredBrandsArr = _ref.filteredBrandsArr,
+      filteredBlsArr = _ref.filteredBlsArr,
+      filteredBreedsArr = _ref.filteredBreedsArr,
+      filteredTofArr = _ref.filteredTofArr;
+
+  var _useState = (0, _react.useState)(_dogFoodData.default),
+      _useState2 = _slicedToArray(_useState, 2),
+      breedFilteredResults = _useState2[0],
+      setBreedFilteredResults = _useState2[1];
+
   (0, _react.useEffect)(function () {
-    console.log("PRODUCT AREA", filteredBrandsArr);
-  }, [filteredBrandsArr]);
+    // selected filters arrive in these arrays
+    var brandFilterValues = filteredBrandsArr;
+    var BlsFilterValues = filteredBlsArr;
+    var BreedsFilterValues = filteredBreedsArr;
+    var TofFilterValues = filteredTofArr; // convert array to object value then check each obj with dogFoodData
+    // console.log(brandFilterValues);
+    // console.log({...brandFilterValues});
+    // brandFilterValues.map((value, index) => {
+    //   if (dogFoodData.includes(value)) {
+    //   }
+    // });
+
+    setBreedFilteredResults(_dogFoodData.default.filter(function (item) {
+      return BreedsFilterValues.every(function (val) {
+        return item.breed.indexOf(val) > -1;
+      });
+    })); // console.log("filtered breed data", breedFilteredResults);
+  }, [filteredBrandsArr, filteredBlsArr, filteredBreedsArr, filteredTofArr]);
   return _react.default.createElement("section", {
     className: "cardsarea"
-  }, _dogFoodData.default.map(function (item, i) {
+  }, breedFilteredResults.map(function (item, i) {
     // console.log("item ",i," ",itxem)
     return _react.default.createElement(_Productcard.default, {
       props: item
@@ -36248,6 +36982,16 @@ var Products = function Products() {
       filteredBlsArr = _useState6[0],
       setFilteredBlsArr = _useState6[1];
 
+  var _useState7 = (0, _react.useState)([]),
+      _useState8 = _slicedToArray(_useState7, 2),
+      filteredBreedsArr = _useState8[0],
+      setFilteredBreedsArr = _useState8[1];
+
+  var _useState9 = (0, _react.useState)([]),
+      _useState10 = _slicedToArray(_useState9, 2),
+      filteredTofArr = _useState10[0],
+      setFilteredTofArr = _useState10[1];
+
   var updateMedia = function updateMedia() {
     setDesktop(window.innerWidth > 1025);
   };
@@ -36258,14 +37002,35 @@ var Products = function Products() {
       return window.removeEventListener("resize", updateMedia);
     };
   });
-  return _react.default.createElement("div", null, _react.default.createElement(_TopNav.default, null), _react.default.createElement(_Displayarea.default, null), _react.default.createElement(_Bottomfiltersnav.default, null), isDesktop ? _react.default.createElement("section", null, _react.default.createElement(_Productscardarea.default, {
-    filteredBrandsArr: filteredBrandsArr
+  return _react.default.createElement("div", null, _react.default.createElement(_TopNav.default, null), _react.default.createElement(_Displayarea.default, null), _react.default.createElement(_Bottomfiltersnav.default, null, _react.default.createElement(_Filtersdropdownarea.default, {
+    filteredBrandsArr: filteredBrandsArr,
+    setFilteredBrandsArr: setFilteredBrandsArr,
+    filteredBlsArr: filteredBlsArr,
+    setFilteredBlsArr: setFilteredBlsArr,
+    filteredBreedsArr: filteredBreedsArr,
+    setFilteredBreedsArr: setFilteredBreedsArr,
+    filteredTofArr: filteredTofArr,
+    setFilteredTofArr: setFilteredTofArr
+  })), isDesktop ? _react.default.createElement("section", null, _react.default.createElement(_Productscardarea.default, {
+    filteredBrandsArr: filteredBrandsArr,
+    filteredBlsArr: filteredBlsArr,
+    filteredBreedsArr: filteredBreedsArr,
+    filteredTofArr: filteredTofArr
   }), " ", _react.default.createElement(_Filtersdropdownarea.default, {
     filteredBrandsArr: filteredBrandsArr,
     setFilteredBrandsArr: setFilteredBrandsArr,
     filteredBlsArr: filteredBlsArr,
-    setFilteredBlsArr: setFilteredBlsArr
-  })) : _react.default.createElement(_Productscardarea.default, null));
+    setFilteredBlsArr: setFilteredBlsArr,
+    filteredBreedsArr: filteredBreedsArr,
+    setFilteredBreedsArr: setFilteredBreedsArr,
+    filteredTofArr: filteredTofArr,
+    setFilteredTofArr: setFilteredTofArr
+  })) : _react.default.createElement(_Productscardarea.default, {
+    filteredBrandsArr: filteredBrandsArr,
+    filteredBlsArr: filteredBlsArr,
+    filteredBreedsArr: filteredBreedsArr,
+    filteredTofArr: filteredTofArr
+  }));
 };
 
 var _default = Products;
@@ -36352,7 +37117,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52775" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50199" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
